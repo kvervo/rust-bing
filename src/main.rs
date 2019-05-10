@@ -1,40 +1,36 @@
 use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
 
-    let secret_number = rand::thread_rng().gen_range(1, 101);
+    let format = "js";
+    let index = "0";
+    let number = "1";
+    let region = "en-US";
+    let api_url = "http://www.bing.com/HPImageArchive.aspx?\
+        format={format}&\
+        idx={index}&\
+        n={number}&\
+        mkt={region}";
+    
+    let debug = api_url.replace("{format}",format)
+        .replace("{index}", index)
+        .replace("{number}", number)
+        .replace("{region}", region);
+    
+    get_json(debug);
+}
 
-    loop {
-        println!("Please input your guess.");
+// Request and parse JSON
+fn get_json(url: String){
+    println!("API {}", url);
+}
 
-        let mut guess = String::new();
+// Download file
+fn download_image(){
 
-        io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
-        
-        let guess: u32 = match guess.trim().parse(){
-            Ok(value) => value,
-            Err(_) => continue,
-        };
+}
 
-        println!("You guessed: {}", guess);
+// Save file locally
+fn save_image(){
 
-        match guess.cmp(&0) {            
-            Ordering::Equal => break,
-            _ => ()
-        }
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-    println!("Exit!");
 }
