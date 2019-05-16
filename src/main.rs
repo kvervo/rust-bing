@@ -1,4 +1,27 @@
+#[macro_use]
+extern crate serde_derive;
+#[macro_use]
+extern crate serde;
+#[macro_use]
+extern crate serde_json;
+
 use std::io;
+use curl::easy::Easy;
+use rustc_serialize::json::Json;
+use reqwest;
+// use serde::Deserialize;
+use serde::de::DeserializeOwned;
+
+#[derive(Deserialize, Debug)]
+struct Images {
+    images: Vec<Image>,
+}
+
+#[derive(Debug, Deserialize)]
+struct Image {
+    url: String,
+    startdate: String
+}
 
 fn main() {
 
@@ -17,12 +40,21 @@ fn main() {
         .replace("{number}", number)
         .replace("{region}", region);
     
-    get_json(debug);
+    match get_json(debug) {
+        Ok(value) => println!("{:?}",value[0]),
+        Err(_) => println!("Fuck!"),
+    };
+    
+    
 }
 
 // Request and parse JSON
-fn get_json(url: String){
-    println!("API {}", url);
+fn get_json(url: String) -> Result<Vec<Image>, reqwest::Error>{
+    
+    let client = reqwest::Client::new();
+    let res = client.get(url.as_str()).send()?.json::<Images>()?;
+    Ok(res.images)
+
 }
 
 // Download file
