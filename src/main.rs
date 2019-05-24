@@ -5,12 +5,9 @@ extern crate serde_derive;
 // #[macro_use]
 // extern crate serde_json;
 
-use std::io;
 use std::error::Error;
-use rustc_serialize::json::Json;
 use reqwest;
 use reqwest::Response;
-use serde::de::DeserializeOwned;
 use std::fs::File;
 use std::path::Path;
 
@@ -74,8 +71,8 @@ fn download_image(img: &Image) -> Result<(), reqwest::Error>{
     let url = format!("http://www.bing.com{}",img.url.as_str());
     let image_path = format!("./image_{}.jpg",img.startdate.as_str());
 
-    let mut client = reqwest::Client::new();
-    let mut image_file = client
+    let client = reqwest::Client::new();
+    let image_file = client
         .get(&url)
         .send()?;
 
@@ -120,11 +117,11 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String, Box<dyn Error>> {
     if output.status.success() {
         Ok(String::from_utf8(output.stdout)?.trim().into())
     } else {
-        let e3: Box<Error> = From::from((format!(
+        let e3: Box<Error> = From::from(format!(
             "{} exited with status code {}",
             command,
             output.status.code().unwrap_or(-1),
-        )));
+        ));
         Err(e3)
     }
 }
