@@ -69,3 +69,11 @@ bing_{startdate}.jpg
 ```
 
 (4) Use local file to set background wallpaper
+
+
+TODO
+
+[] Save files to 'Wallpaper' folder in user space
+[] Add timer to run update everyday at a specific time
+[] Use configuration file instead of having them hardcoded
+[] Remove heavy dependencies (rewqest?, serde?)
