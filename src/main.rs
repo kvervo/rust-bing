@@ -39,20 +39,21 @@ fn main() {
         .replace("{number}", number)
         .replace("{region}", region);
     
-    match get_json(debug) {
-        Ok(images) => {
-            download_image(&images[0]);
-            
-            let image_path = format!("./image_{}.jpg",images[0].startdate.as_str());
-            match set_from_path(&image_path){
-                Ok(result) => {
-                    println!("{:?}", result);
-                },
-                Err(_) => panic!("couldn't set background image to {}", image_path),
-            }
-        },
+    let images = match get_json(debug) {
+        Ok(images) => images,
         Err(_) => panic!("couldn't get Bing Image")
     };
+
+    match download_image(&images[0]) {
+        Ok(_) => println!("done"),
+        Err(e) => panic!("couldn't set background image to {}", e)
+    }
+            
+    let image_path = format!("./image_{}.jpg",images[0].startdate.as_str());
+    match set_from_path(&image_path){
+        Ok(result) => println!("{:?}", result),
+        Err(_) => panic!("couldn't set background image to {}", image_path)
+    }
 }
 
 // Request and parse JSON
