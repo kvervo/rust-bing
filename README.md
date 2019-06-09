@@ -73,8 +73,8 @@ bing_{startdate}.jpg
 
 TODO
 
-[] Save files to 'Wallpaper' folder in user space
+[x] Save files to 'Wallpaper' folder in user space
+[] Remove heavy dependencies (rewqest?, serde?)
 [] Add timer to run update everyday at a specific time
 [] Use configuration file instead of having them hardcoded
-[] Remove heavy dependencies (rewqest?, serde?)
 [] Replace osascript usage by AppKit use
