@@ -32,7 +32,6 @@ const API_URL: &str = "http://www.bing.com/HPImageArchive.aspx?\
         mkt={region}";
 
 fn main() -> std::io::Result<()> {
-    
     let url = API_URL.replace("{format}",FORMAT)
         .replace("{index}", INDEX)
         .replace("{number}", NUMBER)
@@ -46,6 +45,25 @@ fn main() -> std::io::Result<()> {
     let image_name = format!("image_{}.jpg",&images[0].startdate.as_str());
     let image_url = format!("http://www.bing.com{}",&images[0].url.as_str());
 
+    let mut bar = sysbar::Sysbar::new("Foo");
+
+    bar.add_item(
+        "Say 'bar'",
+        Box::new(move || {
+            set_background(&image_name, &image_url);
+        }),
+    );
+
+    bar.add_quit_item("Quit");
+
+    bar.display();
+    Ok(())
+    
+
+
+}
+
+fn set_background(image_name: &String, image_url: &String) -> std::io::Result<()> {
     match dirs::home_dir().map(|h| h.join(CACHE_DIR)) {
         Some(cache_dir) => {
             fs::create_dir_all(&cache_dir)?;
