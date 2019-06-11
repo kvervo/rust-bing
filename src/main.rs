@@ -45,10 +45,10 @@ fn main() -> std::io::Result<()> {
     let image_name = format!("image_{}.jpg",&images[0].startdate.as_str());
     let image_url = format!("http://www.bing.com{}",&images[0].url.as_str());
 
-    let mut bar = sysbar::Sysbar::new("Foo");
+    let mut bar = sysbar::Sysbar::new("Rust-Bing");
 
     bar.add_item(
-        "Say 'bar'",
+        "Today",
         Box::new(move || {
             set_background(&image_name, &image_url);
         }),
@@ -58,9 +58,6 @@ fn main() -> std::io::Result<()> {
 
     bar.display();
     Ok(())
-    
-
-
 }
 
 fn set_background(image_name: &String, image_url: &String) -> std::io::Result<()> {
