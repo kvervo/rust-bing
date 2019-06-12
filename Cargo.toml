@@ -1,0 +1,15 @@
+[package]
+name = "rust-bing"
+description = "Bing Daily Image wallpaper"
+version = "0.1.0"
+authors = ["supay"]
+edition = "2018"
+
+[dependencies]
+reqwest = "0.9.16"
+rustc-serialize = "0.3.24"
+serde = "1.0.91"
+serde_derive = "1.0.91"
+enquote = "1.0.3"
+dirs = "2.0.1"
+sysbar = "0.1.0"
