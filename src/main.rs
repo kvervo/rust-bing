@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate serde_derive;
 
+use hyper::Client;
+use hyper::rt::{self, Future, Stream};
+
 use std::error::Error;
 use reqwest;
 use reqwest::Response;
@@ -8,6 +11,7 @@ use std::fs;
 use std::fs::File;
 use std::path::Path;
 use dirs;
+
 
 #[derive(Deserialize, Debug)]
 struct Images {
@@ -67,20 +71,21 @@ fn set_background(image_name: &str, image_url: &str) -> std::io::Result<()> {
             
             let image_path = cache_dir.join(image_name);
             
-            let file = match download_image(&image_url) {
-                Ok(file) => file,
-                Err(e) => panic!("couldn't set background image to {}", e)
-            };
+            rt::run(download_image(&image_url));
+            // let file = match download_image(&image_url) {
+            //     Ok(file) => file,
+            //     Err(e) => panic!("couldn't set background image to {}", e)
+            // };
 
-            match save_image(&image_path, file) {
-                Ok(_) => println!("saved"),
-                Err(_) => panic!("couldn't save background image to {:?}", image_path)
-            }
+            // match save_image(&image_path, file) {
+            //     Ok(_) => println!("saved"),
+            //     Err(_) => panic!("couldn't save background image to {:?}", image_path)
+            // }
 
-            match set_from_path(&image_path){
-                Ok(result) => println!("{:?}", result),
-                Err(_) => panic!("couldn't set background image to {:?}", image_path)
-            }
+            // match set_from_path(&image_path){
+            //     Ok(result) => println!("{:?}", result),
+            //     Err(_) => panic!("couldn't set background image to {:?}", image_path)
+            // }
             Ok(())
         },
         None => Ok(())
@@ -97,12 +102,22 @@ fn get_json(url: &str) -> Result<Vec<Image>, reqwest::Error>{
 // Download file
 // Save image locally
 // Return Image buffer to be set as background
-fn download_image(url: &str) -> Result<Response, reqwest::Error>{
-    let client = reqwest::Client::new();
-    match client.get(url).send() {
-        Ok(file) => Ok(file),
-        Err(why) => panic!("couldn't download {}: {}", url, why),
-    }
+fn download_image(url: &str) -> impl Future<Item=(), Error=()>{
+    let client = Client::new();
+
+    client.get(url.parse::<hyper::Uri>().unwrap()).map(|res| {
+        println!("Response: {}", res.status());        
+    })
+    .map_err(|err| {
+        println!("Error: {}", err);
+        
+    })
+    
+    // let client = reqwest::Client::new();
+    // match client.get(url).send() {
+    //     Ok(file) => Ok(file),
+    //     Err(why) => panic!("couldn't download {}: {}", url, why),
+    // }
 }
 
 // Save file locally
