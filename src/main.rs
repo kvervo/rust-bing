@@ -37,7 +37,7 @@ fn main() -> std::io::Result<()> {
         .replace("{number}", NUMBER)
         .replace("{region}", REGION);
     
-    let images = match get_json(url) {
+    let images = match get_json(&url) {
        Ok(images) => images,
        Err(_) => panic!("couldn't get Bing Image")
     };
@@ -60,7 +60,7 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn set_background(image_name: &String, image_url: &String) -> std::io::Result<()> {
+fn set_background(image_name: &str, image_url: &str) -> std::io::Result<()> {
     match dirs::home_dir().map(|h| h.join(CACHE_DIR)) {
         Some(cache_dir) => {
             fs::create_dir_all(&cache_dir)?;
@@ -88,16 +88,16 @@ fn set_background(image_name: &String, image_url: &String) -> std::io::Result<()
 }
 
 // Request and parse JSON
-fn get_json(url: String) -> Result<Vec<Image>, reqwest::Error>{
+fn get_json(url: &str) -> Result<Vec<Image>, reqwest::Error>{
     let client = reqwest::Client::new();
-    let res = client.get(url.as_str()).send()?.json::<Images>()?;    
+    let res = client.get(url).send()?.json::<Images>()?;    
     Ok(res.images)
 }
 
 // Download file
 // Save image locally
 // Return Image buffer to be set as background
-fn download_image(url: &String) -> Result<Response, reqwest::Error>{
+fn download_image(url: &str) -> Result<Response, reqwest::Error>{
     let client = reqwest::Client::new();
     match client.get(url).send() {
         Ok(file) => Ok(file),
