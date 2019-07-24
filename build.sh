@@ -3,9 +3,9 @@
 set -e
 
 TARGET=target/release
-MACOS_APP_DIR=$TARGET/$APP_NAME.app
 RESOURCES=resources
 APP_NAME=rust-bing
+MACOS_APP_DIR=$TARGET/$APP_NAME.app
 
 MACOS_APP_NAME=rust-bing
 
