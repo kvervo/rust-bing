@@ -45,7 +45,7 @@ fn main() -> std::io::Result<()> {
     let image_name = format!("image_{}.jpg",&images[0].startdate.as_str());
     let image_url = format!("http://www.bing.com{}",&images[0].url.as_str());
 
-    let mut bar = sysbar::Sysbar::new("rust-bing");
+    let mut bar = sysbar::Sysbar::new("ʕ•̮͡•ʔ");
 
     bar.add_item(
         "Today",
