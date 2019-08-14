@@ -17,6 +17,12 @@ cargo rustc \
     --verbose \
     --release
 
+#By default on Linux and macOS, symbol information is included in the compiled .elf file.
+# This information is not needed to properly execute the binary.
+# To remove this, run strip on the .elf file:
+echo "Stripping symbol information from binary"
+strip $TARGET/$APP_NAME
+
 echo "Copying binary"
 cp $TARGET/$APP_NAME $MACOS_APP_DIR/Contents/MacOS/$APP_NAME
 
