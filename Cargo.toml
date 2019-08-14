@@ -5,6 +5,22 @@ version = "0.1.0"
 authors = ["supay"]
 edition = "2018"
 
+[profile.release]
+# 0-1 is good for debugging. 2 is well-optimized. Max is 3.
+# 's' attempts to reduce size, 'z' reduces size even more.
+opt-level = 'z'
+# Enable Link Time Optimization (LTO) instructs the linker to optimize at the link stage. 
+lto = true
+# By default, Cargo specifies 16 parallel codegen units for release builds.
+# This improves compile times, but prevents some optimizations.
+# Set this to 1 in Cargo.toml to allow for maximum size reduction optimizations:
+codegen-units = 1
+# By default, when Rust code encounters a situation when it must call panic!(), 
+# it unwinds the stack and produces a helpful backtrace. 
+# The unwinding code, however, does require extra binary size. 
+# rustc can be instructed to abort immediately rather than unwind, which removes the need for this extra unwinding code.
+panic = 'abort'
+
 [dependencies]
 reqwest = "0.9.16"
 rustc-serialize = "0.3.24"
